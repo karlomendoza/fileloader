@@ -36,10 +36,10 @@ public class Selenium {
 
 	private static final String Agile = "http://icuaglapp201.icumed.com:7023/Agile/PCMServlet";
 
-	private static final Boolean uploadEvenWithErrors = true;
+	private static final Boolean uploadEvenWithErrors = false;
 
-	private static final String METADATA_PATH = "C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\SAP-DMS\\Training\\upload\\";
-	private static final String MAPPINGS_PATH = "C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\SAP-DMS\\Training\\mapping\\";
+	private static final String METADATA_PATH = "C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\PreparationForRelease\\upload\\";
+	private static final String MAPPINGS_PATH = "C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\PreparationForRelease\\mappings\\";
 	private static final String DOWNLOAD_PATH = "C:\\Users\\Karlo Mendoza\\Downloads\\";
 	private static final String LOGFILE_DEFAULT_NAME = "LogFile.xml";
 
@@ -49,7 +49,7 @@ public class Selenium {
 	private static String loginHandler = "";
 	private static String mainWindowHandler = "";
 
-	private static boolean useEcos = true;
+	private static boolean useEcos = false;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -178,7 +178,7 @@ public class Selenium {
 
 				driver.findElement(By.id("cmdSaveLog")).click();
 
-				Thread.sleep(10000);
+				Thread.sleep(20000);
 				File log = new File(DOWNLOAD_PATH + LOGFILE_DEFAULT_NAME);
 				Files.move(Paths.get(log.getAbsolutePath()),
 						Paths.get(log.getParentFile() + "\\" + appendWhenError + parsedFile.fullNameWithoutExtension + ".xml"));
@@ -209,10 +209,13 @@ public class Selenium {
 
 	private static ParsedFile parseFile(File file) {
 		String nameWithNoise = file.getName();
-		String eco = nameWithNoise.split("_")[1];
+
+		String eco = "";
 
 		if (!useEcos) {
 			eco = "";
+		} else {
+			eco = nameWithNoise.split("_")[1];
 		}
 
 		String numberWithNoise = nameWithNoise.substring(nameWithNoise.length() - 8, nameWithNoise.length() - 5);
@@ -229,6 +232,12 @@ public class Selenium {
 		if (!useEcos) {
 			nameWithoutExtension = nameWithNoise.substring(3, nameWithNoise.length() - 5 - number.length());
 		}
+
+		if (!nameWithNoise.startsWith("T")) {
+			return new ParsedFile(eco, fullNameWithoutExtension.substring(0, fullNameWithoutExtension.length() - number.length()), number,
+					fullNameWithoutExtension);
+		}
+
 		return new ParsedFile(eco, nameWithoutExtension, number, fullNameWithoutExtension);
 	}
 
