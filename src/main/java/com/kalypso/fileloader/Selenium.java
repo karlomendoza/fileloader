@@ -34,22 +34,22 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public class Selenium {
 
-	private static final String Agile = "http://icuaglapp201.icumed.com:7023/Agile/PCMServlet";
+	private static final String Agile = "https://agileplmqa.icumed.com/Agile/PLMServlet";
 
 	private static final Boolean uploadEvenWithErrors = false;
 
-	private static final String METADATA_PATH = "C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\PreparationForRelease\\upload\\";
-	private static final String MAPPINGS_PATH = "C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\PreparationForRelease\\mappings\\";
+	private static final String METADATA_PATH = "C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\QA\\Full\\upload\\";
+	private static final String MAPPINGS_PATH = "C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\Final Migration\\Extract\\mappings\\";
 	private static final String DOWNLOAD_PATH = "C:\\Users\\Karlo Mendoza\\Downloads\\";
 	private static final String LOGFILE_DEFAULT_NAME = "LogFile.xml";
 
-	private static final String USERNAME = "data.loader";
-	private static final String PASSWORD = "agile";
+	private static final String USERNAME = "dataloaduser3";
+	private static final String PASSWORD = "agile123";
 
 	private static String loginHandler = "";
 	private static String mainWindowHandler = "";
 
-	private static boolean useEcos = false;
+	private static boolean useEcos = true;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -178,7 +178,7 @@ public class Selenium {
 
 				driver.findElement(By.id("cmdSaveLog")).click();
 
-				Thread.sleep(20000);
+				Thread.sleep(30000);
 				File log = new File(DOWNLOAD_PATH + LOGFILE_DEFAULT_NAME);
 				Files.move(Paths.get(log.getAbsolutePath()),
 						Paths.get(log.getParentFile() + "\\" + appendWhenError + parsedFile.fullNameWithoutExtension + ".xml"));
@@ -234,7 +234,9 @@ public class Selenium {
 		}
 
 		if (!nameWithNoise.startsWith("T")) {
-			return new ParsedFile(eco, fullNameWithoutExtension.substring(0, fullNameWithoutExtension.length() - number.length()), number,
+
+			return new ParsedFile(nameWithNoise.split("_")[0],
+					fullNameWithoutExtension.substring(nameWithNoise.split("_")[0].length() + 1, fullNameWithoutExtension.length() - number.length()), number,
 					fullNameWithoutExtension);
 		}
 
